@@ -15,4 +15,9 @@ class PlayerManager
     {
         return $this->playerCollection->findOne(array('username' => $username));
     }
+
+    public function finishGame($username, $newRank)
+    {
+        $this->playerCollection->update(array('username' => $username), array('$inc' => array('challenges' => 1), '$set' => array('lastGameDate' => new \MongoDate(), 'rank' => $newRank)));
+    }
 }

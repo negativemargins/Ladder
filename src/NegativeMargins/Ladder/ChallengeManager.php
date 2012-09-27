@@ -5,12 +5,12 @@ namespace NegativeMargins\Ladder;
 class ChallengeManager
 {
     private $challengeCollection;
-    private $playerCollection;
+    private $playerManager;
 
-    public function __construct(\MongoCollection $challengeCollection, \MongoCollection $playerCollection)
+    public function __construct(\MongoCollection $challengeCollection, PlayerManager $playerManager)
     {
         $this->challengeCollection = $challengeCollection;
-        $this->playerCollection = $playerCollection;
+        $this->playerManager = $playerManager;
     }
 
     public function findOneActive($player1, $player2)
@@ -97,8 +97,8 @@ class ChallengeManager
         $this->challengeCollection->update(array('_id' => $challenge['_id']), array('$set' => $set));
 
         // update users
-        $this->playerCollection->update(array('username' => $winner['username']), array('$inc' => array('challenges' => 1), '$set' => array('lastGameDate' => new \MongoDate(), 'rank' => $winnerRank)));
-        $this->playerCollection->update(array('username' => $loser['username']), array('$inc' => array('challenges' => 1), '$set' => array('lastGameDate' => new \MongoDate(), 'rank' => $loserRank)));
+        $this->playerManager->finishGame($winner['username'], $winnerRank);
+        $this->playerManager->finishGame($loser['username'], $loserRank);
     }
 
     public function calculateNewRanks($winnerRank, $loserRank)

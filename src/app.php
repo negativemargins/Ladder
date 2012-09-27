@@ -19,7 +19,7 @@ $app['mongo'] = $app->share(function () {
     return $mongo->ladder;
 });
 $app['challenge_manager'] = $app->share(function () use ($app) {
-    return new ChallengeManager($app['mongo']->challenge, $app['mongo']->player);
+    return new ChallengeManager($app['mongo']->challenge, $app['player_manager']);
 });
 $app['player_manager'] = $app->share(function () use ($app) {
     return new PlayerManager($app['mongo']->player);
