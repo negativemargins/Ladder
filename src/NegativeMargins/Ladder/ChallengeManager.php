@@ -84,14 +84,14 @@ class ChallengeManager
 
         if ($challenge['winner'] == $challenge['challenger']['username']) {
             $set['challenger.beforeRank'] = $winner['rank'];
-            $set['challenger.afterRank'] = $newWinnerRank;
+            $set['challenger.afterRank'] = $winnerRank;
             $set['challenged.beforeRank'] = $loser['rank'];
-            $set['challenged.afterRank'] = $newLoserRank;
+            $set['challenged.afterRank'] = $loserRank;
         } else {
             $set['challenged.beforeRank'] = $winner['rank'];
-            $set['challenged.afterRank'] = $newWinnerRank;
+            $set['challenged.afterRank'] = $winnerRank;
             $set['challenger.beforeRank'] = $loser['rank'];
-            $set['challenger.afterRank'] = $newLoserRank;
+            $set['challenger.afterRank'] = $loserRank;
         }
 
         $this->challengeCollection->update(array('_id' => $challenge['_id']), array('$set' => $set));
