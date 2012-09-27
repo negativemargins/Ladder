@@ -1,0 +1,63 @@
+{% set activetab = 'ladder' %}
+{% extends '/base.html.twig' %}
+
+{% block title 'Ladder | Current Rankings' %}
+{% block content %}
+    <h1>{{ challenge.challenger.username }} vs {{ challenge.challenged.username }}</h1>
+    <p class="lead">
+        {% if challenge.winner %}
+            {{ challenge.winner }} won this match {{ challenge.challenger.score }} to {{ challenge.challenged.score }}
+        {% else %}
+            This game is not yet complete
+        {% endif %}
+    </p>
+    {% if challenge.challenger.username == app.logged_in_user.username or challenge.challenged.username == app.logged_in_user.username %}
+        {% if not challenge.reporter %}
+            <form class="form-horizontal" action="{{ path('challenge_report', {'id': challenge._id}) }}" method="post">
+                <legend>Report Results</legend>
+                <div class="control-group">
+                    <label class="control-label" for="inputMine">My score</label>
+                    <div class="controls">
+                        <input type="number" name="score[mine]" placeholder="My score" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputTheirs">Their score</label>
+                    <div class="controls">
+                        <input type="number" name="score[theirs]" placeholder="Their score" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn">Report</button>
+                    </div>
+                </div>
+            </form>
+        {% elseif not challenge.verifier %}
+            {% if challenge.reporter != app.logged_in_user.username %}
+                <form class="form-horizontal" action="{{ path('challenge_verify', {'id': challenge._id}) }}" method="post">
+                    <legend>Verify Results</legend>
+                    <div class="control-group">
+                        <label class="control-label">{{ challenge.challenger.username }}</label>
+                        <div class="controls">
+                            <span class="lead">{{ challenge.challenger.score }}</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">{{ challenge.challenged.username }}</label>
+                        <div class="controls">
+                            <span class="lead">{{ challenge.challenged.score }}</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn">Verify</button>
+                        </div>
+                    </div>
+                </form>
+            {% else %}
+                <p class="lead">Waiting for verification</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% set activetab = 'ladder' %}
+{% extends '/base.html.twig' %}
+
+{% block title 'Ladder | Current Rankings' %}
+{% block content %}
+    <h1>Current Rankings</h1>
+    <table class="table table-striped">
+        <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>Rank</th>
+            <th>Games</th>
+            <th>Last Game</th>
+            <th></th>
+        </tr>
+        {% for player in players %}
+            <tr{% if app.logged_in_user.username == player.username %} class="info"{% endif %}>
+                <td>{{ loop.index }}</td>
+                <td><a href="{{ path('player_view', {'name': player.username}) }}">{{ player.username }}</a></td>
+                <td>{{ player.rank }}</td>
+                <td>{{ player.challenges }}</td>
+                <td>{{ player.lastGameDate ? player.lastGameDate|date : 'n/a' }}</td>
+                <td>
+                    {% if app.logged_in_user.username != player.username and is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <form style="margin-bottom: 0" action="{{ path('player_challenge', {'name': player.username}) }}" method="POST">
+                            <input class="btn btn-mini btn-primary" type="submit" value="Challenge" />
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,28 @@
+{%  set activetab = 'login' %}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <form class="form-horizontal" action="{{ path('login_check') }}" method="post">
+        <legend>Login</legend>
+        <div class="control-group">
+            <label class="control-label" for="inputUsername">Username</label>
+            <div class="controls">
+                <input type="text" name="_username" value="{{ last_username }}" placeholder="Username" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputPassword">Password</label>
+            <div class="controls">
+                <input type="password" name="_password" value="" placeholder="Password" />
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">Sign in</button>
+            </div>
+        </div>
+        <div class="controls">
+            <a href="{{ path('security_new') }}">Signup for a new account</a>
+        </div>
+    </form>
+{% endblock %}

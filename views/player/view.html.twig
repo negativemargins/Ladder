@@ -1,0 +1,33 @@
+{% extends '/base.html.twig' %}
+
+{% block title 'Ladder | Current Rankings' %}
+{% block content %}
+    <h1>{{ player.username }}</h1>
+    <p class="lead"><strong>Rank</strong> {{ player.rank }}</p>
+    <h2>Active Challenges</h2>
+    {% if actives %}
+        <ul>
+            {% for challenge in actives %}
+                <li>{{ challenge.challenger.username }} challenged {{ challenge.challenged.username }} <a href="{{ path('challenge_view', {'id': challenge._id}) }}">details</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>{{ player.username }} has no active challenges, you should challenge them!</p>
+    {% endif %}
+    {% if unverifieds|length > 0 %}
+        <h2>Unverified Challenges</h2>
+        <ul>
+            {% for challenge in unverifieds %}
+                <li>{{ challenge.winner }} defeated {{ challenge.loser }} {{ challenge.challenged.score }}-{{ challenge.challenger.score }} <a href="{{ path('challenge_view', {'id': challenge._id}) }}">details</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if completes|length > 0 %}
+        <h2>Completed Challenges</h2>
+        <ul>
+            {% for challenge in completes %}
+                <li>{{ challenge.winner }} defeated {{ challenge.loser }} {{ challenge.challenged.score }}-{{ challenge.challenger.score }} <a href="{{ path('challenge_view', {'id': challenge._id}) }}">details</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
