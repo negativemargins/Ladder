@@ -45,9 +45,9 @@ $user->post('/register', function(Application $app, Request $request) {
         'challenges' => 0
     ));
 
-    $app['notifier']->addMessage('Account created');
+    $app['notifier']->addMessage('Account created, please login now');
 
-    return $app->redirect('/');
+    return $app->redirect('/login');
 })->bind('security_register');
 
 return $user;
