@@ -21,7 +21,7 @@ $challenge->post('/{id}/report', function (Application $app, $id, Request $reque
 	$challengeManager = $app['challenge_manager'];
 	$notifier = $app['notifier'];
     $challenge = $challengeManager->find($id);
-    $usermae = $app['logged_in_user']->getUsername();
+    $username = $app['logged_in_user']->getUsername();
 
     if ($challenge['challenger']['username'] != $username && $challenge['challenged']['username'] != $username) {
         $notifier->addError(sprintf('Only %s or %s can report a score', $challenge['challenger']['username'], $challenge['challenged']['username']));
