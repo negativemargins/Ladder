@@ -2,15 +2,21 @@
 
 namespace NegativeMargins\Ladder;
 
+use NegativeMargins\Security\UserProvider;
+
 class ChallengeManager
 {
     private $challengeCollection;
     private $playerManager;
+    private $sailthru;
+    private $userProvider;
 
-    public function __construct(\MongoCollection $challengeCollection, PlayerManager $playerManager)
+    public function __construct(\MongoCollection $challengeCollection, PlayerManager $playerManager, \Sailthru_Client $sailthru, UserProvider $userProvider)
     {
         $this->challengeCollection = $challengeCollection;
         $this->playerManager = $playerManager;
+        $this->sailthru = $sailthru;
+        $this->userProvider = $userProvider;
     }
 
     public function findOneActive($player1, $player2)
@@ -48,6 +54,16 @@ class ChallengeManager
         );
         $this->challengeCollection->insert($challenge);
 
+        $this->sailthru->send(
+            'challenged',
+            $this->userProvider->loadUserByUsername($challenged['username'])->getEmail(),
+            array(
+                'challenged' => $challenged,
+                'challenger' => $challenger,
+                'challenge'  => $challenge
+            )
+        );
+
         return $challenge;
     }
 
@@ -56,16 +72,27 @@ class ChallengeManager
         $winner = $challengerScore > $challengedScore ? 'challenger' : 'challenged';
         $loser = $challengerScore < $challengedScore ? 'challenger' : 'challenged';
 
+
+        $notReporter = ($reporter != $challenge['challenged']['username']) ? $challenge['challenged']['username'] : $challenge['challenger']['username'];
         $set = array(
             'challenger.score' => $challengerScore,
             'challenged.score' => $challengedScore,
             'winner' => $challenge[$winner]['username'],
             'loser' => $challenge[$loser]['username'],
             'reporter' => $reporter,
+            'verifier' => $notReporter,
             'reportDate' => new \MongoDate()
         );
 
         $this->challengeCollection->update(array('_id' => $challenge['_id']), array('$set' => $set));
+
+        $this->sailthru->send(
+            'reported',
+            $this->userProvider->loadUserByUsername($notReporter)->getEmail(),
+            array(
+                'challenge' => $this->find($challenge['_id'])
+            )
+        );
     }
 
     public function verifyChallenge($challenge, $verifier)
@@ -99,6 +126,14 @@ class ChallengeManager
         // update users
         $this->playerManager->finishGame($winner['username'], $winnerRank);
         $this->playerManager->finishGame($loser['username'], $loserRank);
+
+        $this->sailthru->send(
+            'verified',
+            $this->userProvider->loadUserByUsername($challenge['verifier'])->getEmail(),
+            array(
+                'challenge' => $this->find($challenge['_id'])
+            )
+        );
     }
 
     public function calculateNewRanks($winnerRank, $loserRank)
