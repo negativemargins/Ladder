@@ -19,7 +19,7 @@ $app['mongo'] = $app->share(function () {
     return $mongo->ladder;
 });
 $app['challenge_manager'] = $app->share(function () use ($app) {
-    return new ChallengeManager($app['mongo']->challenge, $app['player_manager']);
+    return new ChallengeManager($app['mongo']->challenge, $app['player_manager'], $app['sailthru'], $app['user_provider']);
 });
 $app['player_manager'] = $app->share(function () use ($app) {
     return new PlayerManager($app['mongo']->player);
@@ -34,6 +34,13 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 $app['notifier'] = $app->share(function () use ($app) {
     return new Notifier($app['session']);
+});
+
+$app['sailthru'] = $app->share(function () use ($app) {
+    $api_key = '';
+    $secret = '';
+
+    return new Sailthru_Client($api_key, $secret);
 });
 
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
