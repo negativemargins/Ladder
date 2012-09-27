@@ -40,7 +40,7 @@ $app['sailthru'] = $app->share(function () use ($app) {
     $api_key = '';
     $secret = '';
 
-    return new Sailthru_Client($api_key, $secret);
+    return new \Sailthru_Client($api_key, $secret);
 });
 
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
