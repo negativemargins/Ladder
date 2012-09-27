@@ -42,7 +42,8 @@ $user->post('/register', function(Application $app, Request $request) {
     $app['mongo']->player->insert(array(
         'username'   => $userForm['username'],
         'rank'       => 1500,
-        'challenges' => 0
+        'challenges' => 0,
+        'email'      => $userForm['email'],
     ));
 
     $app['notifier']->addMessage('Account created, please login now');

@@ -56,7 +56,7 @@ class ChallengeManager
 
         $this->sailthru->send(
             'challenged',
-            $this->userProvider->loadUserByUsername($challenged['username'])->getEmail(),
+            $challenged['email'],
             array(
                 'challenged' => $challenged,
                 'challenger' => $challenger,
@@ -86,9 +86,10 @@ class ChallengeManager
 
         $this->challengeCollection->update(array('_id' => $challenge['_id']), array('$set' => $set));
 
+        $notReporter = $this->playerManager->findByUsername($notReporter);
         $this->sailthru->send(
             'reported',
-            $this->userProvider->loadUserByUsername($notReporter)->getEmail(),
+            $notReporter['email'],
             array(
                 'challenge' => $this->find($challenge['_id'])
             )
@@ -129,7 +130,7 @@ class ChallengeManager
 
         $this->sailthru->send(
             'verified',
-            $this->userProvider->loadUserByUsername($challenge['verifier'])->getEmail(),
+            ($verifier == $winner['username']) ? $loser['email'] : $winner['email'],
             array(
                 'challenge' => $this->find($challenge['_id'])
             )
