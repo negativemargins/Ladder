@@ -97,6 +97,10 @@ class ChallengeManager
 
     public function verifyChallenge($challenge, $verifier)
     {
+        if ($challenge['verifyDate'] !== null) {
+            return;
+        }
+
         $winner = $this->playerManager->findByUsername($challenge['winner']);
         $loser  = $this->playerManager->findByUsername($challenge['loser']);
 
