@@ -45,7 +45,7 @@
                         <td><a href="{{ path('challenge_view', {'id': challenge._id}) }}">details</a></td>
                         <td><a href="{{ path('player_view', {'name': challenge.challenger.username}) }}">{{ challenge.challenger.username }}</a></td>
                         <td><a href="{{ path('player_view', {'name': challenge.challenged.username}) }}">{{ challenge.challenged.username }}</a></td>
-                        <td>{{ challenge.challenger.score }}-{{ challenge.challenged.score }}</td>
+                        <td><span{% if challenge.challenger.username == challenge.winner %} class="text-success"{% endif %}>{{ challenge.challenger.score }}</span> - <span{% if challenge.challenged.username == challenge.winner %} class="text-success"{% endif %}>{{ challenge.challenged.score }}</span></td>
                     </tr>
                 {% endfor %}
             </table>
