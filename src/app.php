@@ -99,7 +99,8 @@ $app->get('/login', function(Application $app, Symfony\Component\HttpFoundation\
 
 $app->get('/', function (Application $app) {
     return $app['twig']->render('index.html.twig', array(
-        'output' => 'put things here like top 10, recent games, etc',
+        'activeChallenges' => $app['challenge_manager']->findActive(),
+        'completeChallenges' => $app['challenge_manager']->findComplete(),
     ));
 })->bind('home');
 

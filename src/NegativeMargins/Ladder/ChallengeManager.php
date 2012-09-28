@@ -151,21 +151,26 @@ class ChallengeManager
         return array($newWinnerRank, $newLoserRank);
     }
 
-    public function findActive($player, $limit = 10)
+    public function findActive($player = null, $limit = 10)
     {
-        $cursor = $this->challengeCollection->find(array(
+        $query = array(
             'winner' => array('$exists' => false),
-            '$or' => array(
+        );
+
+        if ($player != null) {
+            $query['$or'] = array(
                 array(
                     'challenger.username' => $player['username'],
                 ),
                 array(
                     'challenged.username' => $player['username'],
                 )
-            ),
-        ))
-        ->sort(array('challengeDate' => -1))
-        ->limit($limit);
+            );
+        }
+
+        $cursor = $this->challengeCollection->find($query)
+            ->sort(array('challengeDate' => -1))
+            ->limit($limit);
 
         return iterator_to_array($cursor);
     }
@@ -190,22 +195,27 @@ class ChallengeManager
         return iterator_to_array($cursor);
     }
 
-    public function findComplete($player, $limit = 10)
+    public function findComplete($player = null, $limit = 10)
     {
-        $cursor = $this->challengeCollection->find(array(
+        $query = array(
             'winner' => array('$exists' => true),
-            'verifier' => array('$exists' => true),
-            '$or' => array(
+            'verifyDate' => array('$exists' => true),
+        );
+
+        if ($player != null) {
+            $query['$or'] = array(
                 array(
                     'challenger.username' => $player['username'],
                 ),
                 array(
                     'challenged.username' => $player['username'],
                 )
-            ),
-        ))
-        ->sort(array('verifyDate' => -1))
-        ->limit($limit);
+            );
+        }
+
+        $cursor = $this->challengeCollection->find($query)
+            ->sort(array('verifyDate' => -1))
+            ->limit($limit);
 
         return iterator_to_array($cursor);
     }
