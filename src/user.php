@@ -43,6 +43,8 @@ $user->post('/register', function(Application $app, Request $request) {
         'username'   => $userForm['username'],
         'rank'       => 1500,
         'challenges' => 0,
+        'wins'       => 0,
+        'losses'     => 0,
         'email'      => $userForm['email'],
     ));
 
