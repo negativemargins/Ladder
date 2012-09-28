@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </form>
-        {% elseif not challenge.verifier %}
+        {% elseif not challenge.verifyDate %}
             {% if challenge.reporter != app.logged_in_user.username %}
                 <form class="form-horizontal" action="{{ path('challenge_verify', {'id': challenge._id}) }}" method="post">
                     <legend>Verify Results</legend>
