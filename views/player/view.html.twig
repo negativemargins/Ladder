@@ -4,6 +4,7 @@
 {% block content %}
     <h1>{{ player.username }}</h1>
     <p class="lead"><strong>Rank</strong> {{ player.rank }}</p>
+    <p class="lead"><strong>W/L</strong> {{ player.wins }}/{{ player.losses }}</p>
     <h2>Active Challenges</h2>
     {% if actives %}
         <ul>

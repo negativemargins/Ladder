@@ -9,7 +9,7 @@
             <th>#</th>
             <th>Player</th>
             <th>Rank</th>
-            <th>Games</th>
+            <th>Games (W-L)</th>
             <th>Last Game</th>
             <th></th>
         </tr>
@@ -18,7 +18,7 @@
                 <td>{{ loop.index }}</td>
                 <td><a href="{{ path('player_view', {'name': player.username}) }}">{{ player.username }}</a></td>
                 <td>{{ player.rank }}</td>
-                <td>{{ player.challenges }}</td>
+                <td>{{ player.challenges }}  ({{ player.wins }}-{{ player.losses }})</td>
                 <td>{{ player.lastGameDate ? player.lastGameDate|date : 'n/a' }}</td>
                 <td>
                     {% if app.logged_in_user.username != player.username and is_granted('IS_AUTHENTICATED_FULLY') %}
