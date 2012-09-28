@@ -128,8 +128,8 @@ class ChallengeManager
         $this->challengeCollection->update(array('_id' => $challenge['_id']), array('$set' => $set));
 
         // update users
-        $this->playerManager->finishGame($winner['username'], $winnerRank);
-        $this->playerManager->finishGame($loser['username'], $loserRank);
+        $this->playerManager->finishGame($winner['username'], $winnerRank, true);
+        $this->playerManager->finishGame($loser['username'], $loserRank, false);
 
         $this->sailthru->send(
             'verified',
