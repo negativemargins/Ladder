@@ -72,7 +72,6 @@ class ChallengeManager
         $winner = $challengerScore > $challengedScore ? 'challenger' : 'challenged';
         $loser = $challengerScore < $challengedScore ? 'challenger' : 'challenged';
 
-
         $notReporter = ($reporter != $challenge['challenged']['username']) ? $challenge['challenged']['username'] : $challenge['challenger']['username'];
         $set = array(
             'challenger.score' => $challengerScore,
@@ -171,7 +170,7 @@ class ChallengeManager
     {
         $cursor = $this->challengeCollection->find(array(
             'winner' => array('$exists' => true),
-            'verifier' => array('$exists' => false),
+            'verifyDate' => array('$exists' => false),
             '$or' => array(
                 array(
                     'challenger.username' => $player['username'],
