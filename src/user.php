@@ -15,12 +15,28 @@ $user->get('/new', function(Application $app, Request $request) {
 $user->post('/register', function(Application $app, Request $request) {
     $userForm = $request->request->get('user');
 
+    // TODO: user form lib
+
+    array_walk($userForm, function (&$item, $key, $prefix) {
+        $item = trim($item);
+    });
+
     try {
         $user = $app['user_provider']->loadUserByUsername($userForm['username']);
         $app['notifier']->addError(sprintf('The username %s is already in use, plesae choose something different', $userForm['username']));
         return $app->redirect($app['url_generator']->generate('security_new'));
     } catch (UsernameNotFoundException $e) {
         // if not found, we can create it
+    }
+
+    if (preg_match('/[^\da-Z]/', $userForm['username'])) {
+        $app['notifier']->addError("Usernames can only contain letters, numbers and underscores");
+        return $app->redirect('/user/new');
+    }
+
+    if ($userForm['password'] == '' || $userForm['password'] == '') {
+        $app['notifier']->addError("You need to enter a password");
+        return $app->redirect('/user/new');
     }
 
     if ($userForm['password'] != $userForm['password2']) {
