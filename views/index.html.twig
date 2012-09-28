@@ -2,5 +2,14 @@
 {% extends '/base.html.twig' %}
 
 {% block content %}
-    <h1>{{ output }}</h1>
+    <div class="hero-unit">
+        <h1>Howdy!</h1>
+        <p>Ladder let's you challenge your friends to a game of ping pong and earn points for doing it!</p>
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <p><a class="btn btn-primary btn-large" href="{{ path('ladder') }}"">Find someone to challenge</a></p>
+        {% else %}
+            <p><a class="btn btn-primary btn-large" href="{{ path('user_login') }}"">Log in</a> or <a class="btn btn-primary btn-large" href="{{ path('security_new') }}">Register</a> to get started</p>
+        {% endif%}
+    </div>
 {% endblock %}

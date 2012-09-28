@@ -26,13 +26,8 @@
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="#">Ladder</a>
-                    <p class="navbar-text pull-left">
+                    <a class="brand" href="/">Ladder</a>
+                    <p class="navbar-text pull-right">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             Hi {{ app.logged_in_user.username }}! <a href="{{ path('user_logout') }}">Logout</a></li>
                         {% else %}
@@ -49,9 +44,6 @@
                                 <li{% if activetab == 'register' %} class="active"{% endif %}><a href="{{ path('security_new') }}">Register</a></li>
                             {% endif %}
                         </ul>
-                        <form class="navbar-search pull-right">
-                            <input type="text" class="search-query" placeholder="Find player">
-                        </form>
                     </div><!--/.nav-collapse -->
                 </div>
             </div>
