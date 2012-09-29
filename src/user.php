@@ -62,6 +62,7 @@ $user->post('/register', function(Application $app, Request $request) {
         'wins'       => 0,
         'losses'     => 0,
         'email'      => $userForm['email'],
+        'apikey'     => md5($userForm['username'] + $userForm['email'])
     ));
 
     $app['notifier']->addMessage('Account created, please login now');

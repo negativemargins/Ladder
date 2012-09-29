@@ -26,6 +26,13 @@ class UserProvider implements UserProviderInterface
         return new User($user['username'], $user['password'], (isset($user['roles']) ? $user['roles'] : array()));
     }
 
+    public function loadUserByApiKey($apikey)
+    {
+        if ($user = $this->mongo->user->findOne(array('apikey' => $apikey))) {
+            return new User($user['username'], $user['password'], (isset($user['roles']) ? $user['roles'] : array()));
+        }
+    }
+
     public function refreshUser(UserInterface $user)
     {
         if (!$user instanceof User) {

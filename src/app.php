@@ -113,7 +113,7 @@ $app->get('/ladder', function (Application $app) {
     ));
 })->bind('ladder');
 
-foreach(array('player', 'challenge', 'user') as $mount) {
+foreach(array('player', 'challenge', 'user', 'api') as $mount) {
     $app->mount("/$mount", require __DIR__."/$mount.php");
 }
 
