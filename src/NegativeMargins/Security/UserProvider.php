@@ -1,10 +1,10 @@
 <?php
 namespace NegativeMargins\Security;
 
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\User;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class UserProvider implements UserProviderInterface
 {
@@ -23,13 +23,13 @@ class UserProvider implements UserProviderInterface
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
 
-        return new User($user['username'], $user['password'], (isset($user['roles']) ? $user['roles'] : array()));
+        return $this->getUser($user);
     }
 
     public function loadUserByApiKey($apikey)
     {
         if ($user = $this->mongo->user->findOne(array('apikey' => $apikey))) {
-            return new User($user['username'], $user['password'], (isset($user['roles']) ? $user['roles'] : array()));
+            return $this->getUser($user);
         }
     }
 
@@ -44,6 +44,15 @@ class UserProvider implements UserProviderInterface
 
     public function supportsClass($class)
     {
-        return $class === 'Symfony\Component\Security\Core\User\User';
+        return $class === 'NegativeMargins\Security\User';
+    }
+
+    protected function getUser($user)
+    {
+        $object = new User($user['username'], $user['password'], (isset($user['roles']) ? $user['roles'] : array()));
+
+        $object->setApikey($user['apikey']);
+
+        return $object;
     }
 }

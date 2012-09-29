@@ -31,4 +31,9 @@
             {% endfor %}
         </ul>
     {% endif %}
+
+    {% if app.logged_in_user.username == player.username %}
+        <h2>Api key</h2>
+        <input value="{{ app.logged_in_user.apikey }}" onclick="this.select()" />
+    {% endif %}
 {% endblock %}

@@ -4,10 +4,10 @@ use NegativeMargins\Ladder\ChallengeManager;
 use NegativeMargins\Ladder\PlayerManager;
 use NegativeMargins\Ladder\RankManager;
 use NegativeMargins\Notifier\Notifier;
+use NegativeMargins\Security\User;
 use NegativeMargins\Security\UserProvider;
 use Silex\Application;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\User;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
@@ -77,7 +77,7 @@ $app['logged_in_user'] = $app->share(function(Application $app) {
     if (null !== $token) {
         $user = $token->getUser();
 
-        if ($user instanceof Symfony\Component\Security\Core\User\User) {
+        if ($user instanceof User) {
             return $user;
         }
     }
