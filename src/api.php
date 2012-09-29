@@ -19,6 +19,7 @@ $requireApiKey = function (Request $request) use ($app) {
 $api->get('/player/{name}', function (Application $app, $name) {
     if ($player = $app['player_manager']->findByUsername($name)) {
         unset($player['_id']);
+        unset($player['email']);
         return $app->json($player);
     } else {
         return $app->json(array(
