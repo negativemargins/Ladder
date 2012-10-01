@@ -58,9 +58,9 @@ class ChallengeManager
             'challenged',
             $challenged['email'],
             array(
-                'challenged' => $challenged,
-                'challenger' => $challenger,
-                'challenge'  => $challenge
+                'challenged' => $this->fixId($challenged),
+                'challenger' => $this->fixId($challenger),
+                'challenge'  => $this->fixId($challenge)
             )
         );
 
@@ -90,7 +90,7 @@ class ChallengeManager
             'reported',
             $notReporter['email'],
             array(
-                'challenge' => $this->find($challenge['_id'])
+                'challenge' => $this->fixId($this->find($challenge['_id']))
             )
         );
     }
@@ -135,7 +135,7 @@ class ChallengeManager
             'verified',
             ($verifier == $winner['username']) ? $loser['email'] : $winner['email'],
             array(
-                'challenge' => $this->find($challenge['_id'])
+                'challenge' => $this->fixId($this->find($challenge['_id']))
             )
         );
     }
@@ -218,5 +218,15 @@ class ChallengeManager
             ->limit($limit);
 
         return iterator_to_array($cursor);
+    }
+
+    protected function fixId(array $mongoness)
+    {
+        if (isset($mongoness['_id'])) {
+            $mongoness['id'] = (string)$mongoness['_id'];
+            unset($mongoness['_id']);
+        }
+
+        return $mongoness;
     }
 }
